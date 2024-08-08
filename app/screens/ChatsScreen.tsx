@@ -10,6 +10,7 @@ const chats = [
   { id: "2", name: "Jane Smith" },
   { id: "3", name: "p2v0 pr1m3" },
   { id: "4", name: "zxcZXC" },
+  { id: "5", name: "alcoGramm" },
 ];
 
 export const ChatsScreen = ({ navigation }) => {
