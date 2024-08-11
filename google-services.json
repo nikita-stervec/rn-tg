@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "767827671392",
+    "project_id": "rn-tg-zxc",
+    "storage_bucket": "rn-tg-zxc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:767827671392:android:a352431b3c4ce89fe5c605",
+        "android_client_info": {
+          "package_name": "com.rntg"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvHztd0pK6G2u4j7PJrgZgnGIsIkpCjEM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
