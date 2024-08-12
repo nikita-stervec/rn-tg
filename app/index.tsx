@@ -1,6 +1,8 @@
 import * as React from "react";
+import { useEffect, useState } from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { AccountScreen } from "./screens/AccountScreen";
 import { SettingsScreen } from "./screens/SettingsScreen";
 import { ChatsStack } from "./stack/ChatsStack";
@@ -10,36 +12,91 @@ import {
   darkNavigationTheme,
 } from "@/helpers/navigationTheme";
 import Entypo from "@expo/vector-icons/Entypo";
+import { LoginScreen } from "./screens/LoginScreen";
+import { RegisterScreen } from "./screens/RegisterScreen";
+import { Provider } from "react-redux";
+import store from "@/store/store";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "@/store/store";
+import { setAuthenticated } from "@/store/slices/authSlice";
 
 const Drawer = createDrawerNavigator();
+const Stack = createNativeStackNavigator();
 
 const AppContent: React.FC = () => {
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  );
+
   const { theme } = useTheme();
 
   const getIconColor = () => (theme === "dark" ? "white" : "black");
+
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        dispatch(setAuthenticated(true));
+      } else {
+        dispatch(setAuthenticated(false));
+      }
+    });
+  }, [dispatch]);
+
+  if (!isAuthenticated) {
+    return (
+      <NavigationContainer
+        independent={true}
+        theme={theme === "dark" ? darkNavigationTheme : lightNavigationTheme}
+      >
+        <Stack.Navigator>
+          <Stack.Screen
+            name='Login'
+            component={LoginScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name='Register'
+            component={RegisterScreen}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
+  }
 
   return (
     <NavigationContainer
       independent={true}
       theme={theme === "dark" ? darkNavigationTheme : lightNavigationTheme}
     >
-      <Drawer.Navigator initialRouteName='Chats'>
+      <Drawer.Navigator
+        screenOptions={{
+          drawerStyle: {
+            backgroundColor: theme === "dark" ? "#1e1e1e" : "#f2f2f2",
+          },
+          drawerInactiveTintColor: getIconColor(),
+          drawerActiveTintColor: "#3366FF",
+          drawerActiveBackgroundColor: theme === "dark" ? "#333333" : "#e6e6e6",
+        }}
+      >
+        <Drawer.Screen
+          name='Chats'
+          component={ChatsStack}
+          options={{
+            drawerIcon: ({ color }) => (
+              <Entypo name='chat' size={24} color={color} />
+            ),
+          }}
+        />
         <Drawer.Screen
           name='My account'
           component={AccountScreen}
           options={{
             drawerIcon: ({ color }) => (
-              <Entypo name='user' size={24} color={getIconColor()} />
-            ),
-          }}
-        />
-        <Drawer.Screen
-          name='Chats'
-          component={ChatsStack}
-          options={{
-            headerShown: false,
-            drawerIcon: ({ color }) => (
-              <Entypo name='chat' size={24} color={getIconColor()} />
+              <Entypo name='user' size={24} color={color} />
             ),
           }}
         />
@@ -48,7 +105,7 @@ const AppContent: React.FC = () => {
           component={SettingsScreen}
           options={{
             drawerIcon: ({ color }) => (
-              <Entypo name='cog' size={24} color={getIconColor()} />
+              <Entypo name='cog' size={24} color={color} />
             ),
           }}
         />
@@ -59,9 +116,11 @@ const AppContent: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <ThemeProvider>
-      <AppContent />
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider>
+        <AppContent />
+      </ThemeProvider>
+    </Provider>
   );
 };
 
