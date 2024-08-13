@@ -20,6 +20,8 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store/store";
 import { setAuthenticated } from "@/store/slices/authSlice";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { auth } from "@/firebase";
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -29,7 +31,9 @@ const AppContent: React.FC = () => {
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   );
-
+  const { email: userEmail } = useSelector(
+    (state: RootState) => state.user.user?.email
+  );
   const { theme } = useTheme();
 
   const getIconColor = () => (theme === "dark" ? "white" : "black");
@@ -68,49 +72,60 @@ const AppContent: React.FC = () => {
   }
 
   return (
-    <NavigationContainer
-      independent={true}
-      theme={theme === "dark" ? darkNavigationTheme : lightNavigationTheme}
-    >
-      <Drawer.Navigator
-        screenOptions={{
-          drawerStyle: {
-            backgroundColor: theme === "dark" ? "#1e1e1e" : "#f2f2f2",
-          },
-          drawerInactiveTintColor: getIconColor(),
-          drawerActiveTintColor: "#3366FF",
-          drawerActiveBackgroundColor: theme === "dark" ? "#333333" : "#e6e6e6",
-        }}
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <NavigationContainer
+        independent={true}
+        theme={theme === "dark" ? darkNavigationTheme : lightNavigationTheme}
       >
-        <Drawer.Screen
-          name='Chats'
-          component={ChatsStack}
-          options={{
-            drawerIcon: ({ color }) => (
-              <Entypo name='chat' size={24} color={color} />
-            ),
+        <Drawer.Navigator
+          screenOptions={{
+            drawerStyle: {
+              backgroundColor: theme === "dark" ? "#1e1e1e" : "#f2f2f2",
+            },
+            drawerInactiveTintColor: getIconColor(),
+            drawerActiveTintColor: "#3366FF",
+            drawerActiveBackgroundColor:
+              theme === "dark" ? "#333333" : "#e6e6e6",
+            gestureHandlerProps: {
+              minPointers: 1,
+              maxPointers: 1,
+              activeOffsetX: [-20, 20],
+              failOffsetY: [-10, 10],
+              hitSlop: { left: 100 },
+            },
           }}
-        />
-        <Drawer.Screen
-          name='My account'
-          component={AccountScreen}
-          options={{
-            drawerIcon: ({ color }) => (
-              <Entypo name='user' size={24} color={color} />
-            ),
-          }}
-        />
-        <Drawer.Screen
-          name='Settings'
-          component={SettingsScreen}
-          options={{
-            drawerIcon: ({ color }) => (
-              <Entypo name='cog' size={24} color={color} />
-            ),
-          }}
-        />
-      </Drawer.Navigator>
-    </NavigationContainer>
+        >
+          <Drawer.Screen
+            name={email ? email : "My account"}
+            component={AccountScreen}
+            options={{
+              drawerIcon: ({ color }) => (
+                <Entypo name='user' size={24} color={color} />
+              ),
+            }}
+          />
+          <Drawer.Screen
+            name='Chats'
+            component={ChatsStack}
+            options={{
+              headerShown: false,
+              drawerIcon: ({ color }) => (
+                <Entypo name='chat' size={24} color={color} />
+              ),
+            }}
+          />
+          <Drawer.Screen
+            name='Settings'
+            component={SettingsScreen}
+            options={{
+              drawerIcon: ({ color }) => (
+                <Entypo name='cog' size={24} color={color} />
+              ),
+            }}
+          />
+        </Drawer.Navigator>
+      </NavigationContainer>
+    </GestureHandlerRootView>
   );
 };
 
