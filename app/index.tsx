@@ -21,7 +21,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store/store";
 import { setAuthenticated } from "@/store/slices/authSlice";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { auth } from "@/firebase";
+import getThemeStyles from "@/helpers/getThemeStyles";
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -31,12 +31,9 @@ const AppContent: React.FC = () => {
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   );
-  const { email: userEmail } = useSelector(
-    (state: RootState) => state.user.user?.email
-  );
+  const email = useSelector((state: RootState) => state.user.user?.email);
+  const name = useSelector((state: RootState) => state.user.user?.name);
   const { theme } = useTheme();
-
-  const getIconColor = () => (theme === "dark" ? "white" : "black");
 
   useEffect(() => {
     const auth = getAuth();
@@ -48,6 +45,23 @@ const AppContent: React.FC = () => {
       }
     });
   }, [dispatch]);
+
+  const emailCutter = (email: string | undefined): string => {
+    if (email === undefined) {
+      return "";
+    }
+    const atIndex = email.indexOf("@");
+    if (atIndex === -1) {
+      return email;
+    }
+    return email.slice(0, atIndex);
+  };
+
+  const cuttedEmail = emailCutter(email);
+
+  const themeStyles = getThemeStyles(theme);
+
+  const getIconColor = () => (theme === "dark" ? "white" : "black");
 
   if (!isAuthenticated) {
     return (
@@ -80,12 +94,11 @@ const AppContent: React.FC = () => {
         <Drawer.Navigator
           screenOptions={{
             drawerStyle: {
-              backgroundColor: theme === "dark" ? "#1e1e1e" : "#f2f2f2",
+              backgroundColor: themeStyles.container.backgroundColor,
             },
             drawerInactiveTintColor: getIconColor(),
             drawerActiveTintColor: "#3366FF",
-            drawerActiveBackgroundColor:
-              theme === "dark" ? "#333333" : "#e6e6e6",
+            drawerActiveBackgroundColor: themeStyles.container.backgroundColor,
             gestureHandlerProps: {
               minPointers: 1,
               maxPointers: 1,
@@ -96,7 +109,7 @@ const AppContent: React.FC = () => {
           }}
         >
           <Drawer.Screen
-            name={email ? email : "My account"}
+            name={name ? name : cuttedEmail || "My account"}
             component={AccountScreen}
             options={{
               drawerIcon: ({ color }) => (

@@ -4,6 +4,8 @@ interface User {
   tag: string;
   id: string;
   email: string;
+  name?: string;
+  avatar?: string;
 }
 
 export interface UserState {
@@ -22,32 +24,19 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    fetchUsersStart(state) {
-      state.loading = true;
-      state.error = null;
-    },
-    fetchUsersSuccess(state, action: PayloadAction<User>) {
-      state.loading = false;
-      state.user = action.payload;
-    },
-    fetchUsersFailure(state, action: PayloadAction<string>) {
-      state.loading = false;
-      state.error = action.payload;
-    },
     setUser(state, action: PayloadAction<User>) {
       state.user = action.payload;
     },
     clearUser(state) {
       state.user = null;
     },
+    setName(state, action: PayloadAction<User["name"]>) {
+      if (state.user) {
+        state.user.name = action.payload;
+      }
+    },
   },
 });
 
 export default userSlice.reducer;
-export const {
-  fetchUsersStart,
-  fetchUsersSuccess,
-  fetchUsersFailure,
-  setUser,
-  clearUser,
-} = userSlice.actions;
+export const { setUser, clearUser, setName } = userSlice.actions;

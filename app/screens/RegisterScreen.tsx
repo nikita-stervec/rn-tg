@@ -1,11 +1,12 @@
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
-import { useTheme } from "@/helpers/themeContext";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/store/slices/userSlice";
 import { setAuthenticated } from "@/store/slices/authSlice";
 import { auth } from "@/firebase";
+import getThemeStyles from "@/helpers/getThemeStyles";
+import { useTheme } from "@/helpers/themeContext";
 
 export const RegisterScreen = () => {
   const dispatch = useDispatch();
@@ -13,6 +14,7 @@ export const RegisterScreen = () => {
   const [email, setEmail] = useState("");
   const [userTag, setUserTag] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const { theme } = useTheme();
 
   const handleRedirect = () => {
@@ -20,6 +22,11 @@ export const RegisterScreen = () => {
   };
 
   const handleRegister = () => {
+    if (!email || !userTag || !password) {
+      setError("All fields are required");
+      return;
+    }
+
     auth
       .createUserWithEmailAndPassword(email, password)
       .then(({ user }) => {
@@ -33,58 +40,18 @@ export const RegisterScreen = () => {
         dispatch(setAuthenticated(true));
         navigation.navigate("Chats");
       })
-      .catch(err => console.error(err));
+      .catch(err => {
+        setError(err.message);
+        console.error(err);
+      });
   };
 
-  const getThemeStyles = () => {
-    return {
-      container: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: theme === "dark" ? "#1e1e1e" : "#fff",
-      },
-      link: {
-        color: theme === "dark" ? "#3366FF" : "blue",
-        marginTop: 10,
-      },
-      title: {
-        fontSize: 24,
-        fontWeight: "bold",
-        marginBottom: 20,
-        color: theme === "dark" ? "#fff" : "#000",
-      },
-      input: {
-        width: "80%",
-        height: 40,
-        borderWidth: 1,
-        borderColor: theme === "dark" ? "#333" : "#ccc",
-        borderRadius: 5,
-        paddingHorizontal: 10,
-        marginBottom: 10,
-        backgroundColor: theme === "dark" ? "#333" : "#fff",
-        color: theme === "dark" ? "#fff" : "#000",
-      },
-      button: {
-        width: "80%",
-        backgroundColor: theme === "dark" ? "#3366FF" : "#007AFF",
-        borderRadius: 5,
-        paddingVertical: 10,
-        marginTop: 20,
-      },
-      buttonText: {
-        color: "#fff",
-        textAlign: "center",
-        fontWeight: "bold",
-      },
-    };
-  };
-
-  const themeStyles = getThemeStyles();
+  const themeStyles = getThemeStyles(theme);
 
   return (
     <View style={themeStyles.container}>
       <Text style={themeStyles.title}>Register</Text>
+      {error ? <Text style={themeStyles.errorText}>{error}</Text> : null}
       <TextInput
         style={themeStyles.input}
         placeholder='Email'
@@ -92,7 +59,7 @@ export const RegisterScreen = () => {
         onChangeText={text => setEmail(text)}
         autoCapitalize='none'
         keyboardType='email-address'
-        placeholderTextColor={theme === "dark" ? "#aaa" : "#888"}
+        placeholderTextColor={themeStyles.placeholderTextColor.color}
       />
       <TextInput
         style={themeStyles.input}
@@ -100,7 +67,7 @@ export const RegisterScreen = () => {
         value={userTag}
         onChangeText={text => setUserTag(text)}
         autoCapitalize='none'
-        placeholderTextColor={theme === "dark" ? "#aaa" : "#888"}
+        placeholderTextColor={themeStyles.placeholderTextColor.color}
       />
       <TextInput
         style={themeStyles.input}
@@ -108,7 +75,7 @@ export const RegisterScreen = () => {
         value={password}
         onChangeText={text => setPassword(text)}
         secureTextEntry
-        placeholderTextColor={theme === "dark" ? "#aaa" : "#888"}
+        placeholderTextColor={themeStyles.placeholderTextColor.color}
       />
       <TouchableOpacity style={themeStyles.button} onPress={handleRegister}>
         <Text style={themeStyles.buttonText}>Register</Text>

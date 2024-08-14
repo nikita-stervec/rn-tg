@@ -5,7 +5,7 @@ export const lightThemeColors = {
 };
 
 export const darkThemeColors = {
-  background: "#000000", // black
+  background: "#1e1e1e", // black
   text: "#ffffff",
   title: "#ffffff",
 };
