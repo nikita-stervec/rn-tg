@@ -1,19 +1,14 @@
 import { useTheme } from "@/helpers/themeContext";
+import { RootState } from "@/store/store";
 import Entypo from "@expo/vector-icons/Entypo";
 import { DrawerActions } from "@react-navigation/native";
 import React, { useLayoutEffect } from "react";
 import { Button, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-const chats = [
-  { id: "1", name: "John Doe" },
-  { id: "2", name: "Jane Smith" },
-  { id: "3", name: "p2v0 pr1m3" },
-  { id: "4", name: "zxcZXC" },
-  { id: "5", name: "alcoGramm" },
-];
+import { useSelector } from "react-redux";
 
 export const ChatsScreen = ({ navigation }) => {
+  const { user } = useSelector((state: RootState) => state.user);
   const { theme } = useTheme();
 
   useLayoutEffect(() => {
@@ -29,6 +24,14 @@ export const ChatsScreen = ({ navigation }) => {
       ),
     });
   }, [theme]);
+
+  const chats = [
+    { id: "1", name: "John Doe" },
+    { id: "2", name: "John Doe" },
+    { id: "3", name: "John Doe" },
+    { id: "4", name: "zxcZXC" },
+    { id: "5", name: "alcoGramm" },
+  ];
 
   return (
     <SafeAreaView>
