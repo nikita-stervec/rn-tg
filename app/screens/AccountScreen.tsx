@@ -1,15 +1,31 @@
 import React, { useLayoutEffect, useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
-import { useTheme } from "@/helpers/themeContext";
+import { useTheme } from "@/app/helpers/themeContext";
 import Entypo from "@expo/vector-icons/Entypo";
 import { DrawerActions } from "@react-navigation/native";
 import { auth } from "@/firebase";
 import { useDispatch } from "react-redux";
 import { setAuthenticated } from "@/store/slices/authSlice";
 import { clearUser, setName } from "@/store/slices/userSlice";
-import getThemeStyles from "@/helpers/getThemeStyles";
+import getThemeStyles from "@/app/helpers/getThemeStyles";
+import { DrawerNavigationProp } from "@react-navigation/drawer";
 
-export const AccountScreen = ({ navigation }) => {
+type DrawerParamList = {
+  Chats: undefined;
+  Settings: undefined;
+  [key: string]: undefined | { screen: string };
+};
+
+type AccountScreenNavigationProp = DrawerNavigationProp<
+  DrawerParamList,
+  "Chats"
+>;
+
+interface AccountScreenProps {
+  navigation: AccountScreenNavigationProp;
+}
+
+export const AccountScreen = ({ navigation }: AccountScreenProps) => {
   const [name, setNameState] = useState("");
   const { theme } = useTheme();
   const dispatch = useDispatch();
@@ -40,7 +56,6 @@ export const AccountScreen = ({ navigation }) => {
     auth.signOut().then(() => {
       dispatch(setAuthenticated(false));
       dispatch(clearUser());
-      navigation.navigate("Login");
     });
   };
 

@@ -1,8 +1,25 @@
-import { useTheme } from "@/helpers/themeContext";
+import { useTheme } from "@/app/helpers/themeContext";
 import { TouchableOpacity, View, Text } from "react-native";
-import getChatThemeStyles from "@/helpers/getChatsThemeStyles";
+import getChatThemeStyles from "@/app/helpers/getChatsThemeStyles";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RouteProp } from "@react-navigation/native";
+import { ChatsStackParamList } from "@/app/stack/ChatsStack"; // Путь к вашему файлу навигации
 
-export const ChatView = ({ item, navigation }) => {
+interface ChatItem {
+  id: string;
+  name: string;
+}
+
+type ChatViewNavigationProp = StackNavigationProp<ChatsStackParamList, "Chats">;
+type ChatViewRouteProp = RouteProp<ChatsStackParamList, "Chats">;
+
+interface ChatViewProps {
+  item: ChatItem;
+  navigation: ChatViewNavigationProp;
+  route?: ChatViewRouteProp; // Сделать route необязательным
+}
+
+export const ChatView = ({ item, navigation, route }: ChatViewProps) => {
   const { theme } = useTheme();
   const styles = getChatThemeStyles(theme);
 

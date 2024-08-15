@@ -5,22 +5,37 @@ import {
   TextInput,
   TouchableOpacity,
   FlatList,
-  StyleSheet,
 } from "react-native";
-import { useTheme } from "@/helpers/themeContext";
-import createThemeStyles from "@/helpers/themeStyles";
-import getChatThemeStyles from "@/helpers/getChatThemeStyles";
+import { useTheme } from "@/app/helpers/themeContext";
+import getChatThemeStyles from "@/app/helpers/getChatThemeStyles";
 
-export const ChatScreen = ({ route }) => {
+interface ChatScreenRouteParams {
+  chatName: string;
+}
+
+interface Message {
+  id: string;
+  text: string;
+}
+
+export const ChatScreen = ({
+  route,
+}: {
+  route: { params: ChatScreenRouteParams };
+}) => {
   const { chatName } = route.params;
   const { theme } = useTheme();
+  const [message, setMessage] = useState<string>("");
+  const [messages, setMessages] = useState<Message[]>([]);
   const themeStyles = getChatThemeStyles(theme);
-  const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
 
   const sendMessage = () => {
     if (message.trim()) {
-      setMessages([...messages, message]);
+      const newMessage: Message = {
+        id: new Date().toISOString(),
+        text: message,
+      };
+      setMessages([...messages, newMessage]);
       setMessage("");
     }
   };
@@ -30,9 +45,9 @@ export const ChatScreen = ({ route }) => {
       <Text style={themeStyles.text}>Chat w/ {chatName}</Text>
       <FlatList
         data={messages}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={item => item.id}
         renderItem={({ item }) => (
-          <Text style={themeStyles.message}>{item}</Text>
+          <Text style={themeStyles.message}>{item.text}</Text>
         )}
         style={themeStyles.messagesContainer}
       />

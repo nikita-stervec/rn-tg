@@ -2,7 +2,12 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { ChatsScreen } from "../screens/ChatsScreen";
 import { ChatScreen } from "../screens/ChatScreen";
 
-const Stack = createStackNavigator();
+export type ChatsStackParamList = {
+  Chats: undefined;
+  Chat: { chatId: string; chatName: string };
+};
+
+const Stack = createStackNavigator<ChatsStackParamList>();
 
 export const ChatsStack = () => {
   return (

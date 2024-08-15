@@ -5,11 +5,23 @@ import { useDispatch } from "react-redux";
 import { setUser } from "@/store/slices/userSlice";
 import { setAuthenticated } from "@/store/slices/authSlice";
 import { auth } from "@/firebase";
-import { useTheme } from "@/helpers/themeContext";
-import getThemeStyles from "@/helpers/getThemeStyles";
+import { useTheme } from "@/app/helpers/themeContext";
+import getThemeStyles from "@/app/helpers/getThemeStyles";
+import { StackNavigationProp } from "@react-navigation/stack";
+
+type RootStackParamList = {
+  Login: undefined;
+  Register: undefined;
+  Chats: undefined;
+};
+
+type LoginScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  "Login"
+>;
 
 export const LoginScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<LoginScreenNavigationProp>();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
@@ -25,14 +37,20 @@ export const LoginScreen = () => {
     auth
       .signInWithEmailAndPassword(email, pass)
       .then(({ user }) => {
-        dispatch(
-          setUser({
-            email: user.email,
-            id: user.uid,
-          })
-        );
-        dispatch(setAuthenticated(true));
-        navigation.navigate("Chats");
+        if (user) {
+          dispatch(
+            setUser({
+              email: user.email,
+              id: user.uid,
+              tag: null,
+              name: user.displayName || undefined,
+              avatar: user.photoURL || undefined,
+            })
+          );
+          dispatch(setAuthenticated(true));
+        } else {
+          alert("User is null");
+        }
       })
       .catch(() => alert("Wrong Email or Password"));
   };
