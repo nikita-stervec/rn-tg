@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/store/slices/userSlice";
 import { setAuthenticated } from "@/store/slices/authSlice";
-import { auth } from "@/firebase";
+import auth from "@react-native-firebase/auth";
 import { useTheme } from "@/app/helpers/themeContext";
 import getThemeStyles from "@/app/helpers/getThemeStyles";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -34,7 +34,7 @@ export const LoginScreen = () => {
   };
 
   const handleLogin = (email: string, pass: string) => {
-    auth
+    auth()
       .signInWithEmailAndPassword(email, pass)
       .then(({ user }) => {
         if (user) {

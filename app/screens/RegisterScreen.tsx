@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/store/slices/userSlice";
 import { setAuthenticated } from "@/store/slices/authSlice";
-import { auth } from "@/firebase";
+import auth from "@react-native-firebase/auth";
 import getThemeStyles from "@/app/helpers/getThemeStyles";
 import { useTheme } from "@/app/helpers/themeContext";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -39,7 +39,7 @@ export const RegisterScreen = () => {
       return;
     }
 
-    auth
+    auth()
       .createUserWithEmailAndPassword(email, password)
       .then(({ user }) => {
         if (user) {

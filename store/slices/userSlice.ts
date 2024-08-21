@@ -35,8 +35,13 @@ const userSlice = createSlice({
         state.user.name = action.payload;
       }
     },
+    setTag(state, action: PayloadAction<User["tag"]>) {
+      if (state.user) {
+        state.user.tag = action.payload;
+      }
+    },
   },
 });
 
 export default userSlice.reducer;
-export const { setUser, clearUser, setName } = userSlice.actions;
+export const { setUser, clearUser, setName, setTag } = userSlice.actions;

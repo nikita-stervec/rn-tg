@@ -8,14 +8,16 @@ import {
 } from "react-native";
 import { useTheme } from "@/app/helpers/themeContext";
 import getChatThemeStyles from "@/app/helpers/getChatThemeStyles";
+import Message from "@/components/Message";
 
 interface ChatScreenRouteParams {
   chatName: string;
 }
 
-interface Message {
+export interface Message {
   id: string;
   text: string;
+  sender: boolean;
 }
 
 export const ChatScreen = ({
@@ -34,6 +36,7 @@ export const ChatScreen = ({
       const newMessage: Message = {
         id: new Date().toISOString(),
         text: message,
+        sender: true,
       };
       setMessages([...messages, newMessage]);
       setMessage("");
@@ -47,7 +50,7 @@ export const ChatScreen = ({
         data={messages}
         keyExtractor={item => item.id}
         renderItem={({ item }) => (
-          <Text style={themeStyles.message}>{item.text}</Text>
+          <Message isSender={item.sender} item={item.text} id={item.id} />
         )}
         style={themeStyles.messagesContainer}
       />

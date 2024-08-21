@@ -16,7 +16,7 @@ type ChatViewRouteProp = RouteProp<ChatsStackParamList, "Chats">;
 interface ChatViewProps {
   item: ChatItem;
   navigation: ChatViewNavigationProp;
-  route?: ChatViewRouteProp; // Сделать route необязательным
+  route?: ChatViewRouteProp;
 }
 
 export const ChatView = ({ item, navigation, route }: ChatViewProps) => {

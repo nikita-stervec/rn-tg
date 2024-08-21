@@ -17,10 +17,37 @@ function createThemeStyles(theme: string) {
       width: "100%",
       padding: 10,
     },
-    message: {
+    messageContainer: {
+      backgroundColor: theme === "dark" ? "#333" : "#e0e0e0",
+      borderRadius: 10,
+      padding: 10,
+      marginBottom: 5,
+      alignSelf: "flex-start",
+      maxWidth: "80%",
+    },
+    senderMessageContainer: {
+      backgroundColor: theme === "dark" ? "#3366FF" : "#007AFF",
+      borderRadius: 10,
+      padding: 10,
+      marginBottom: 5,
+      alignSelf: "flex-end",
+      maxWidth: "80%",
+    },
+    receiverMessageContainer: {
+      backgroundColor: theme === "dark" ? "#333" : "#e0e0e0",
+      borderRadius: 10,
+      padding: 10,
+      marginBottom: 5,
+      alignSelf: "flex-start",
+      maxWidth: "80%",
+    },
+    messageTextSender: {
+      fontSize: 14,
+      color: theme === "dark" ? "#fff" : "#fff",
+    },
+    messageTextReceiver: {
       fontSize: 14,
       color: theme === "dark" ? "#fff" : "#000",
-      marginBottom: 5,
     },
     inputContainer: {
       flexDirection: "row",
@@ -56,4 +83,5 @@ function createThemeStyles(theme: string) {
     },
   });
 }
+
 export default createThemeStyles;
