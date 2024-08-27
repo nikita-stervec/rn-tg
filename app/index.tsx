@@ -16,7 +16,7 @@ import { LoginScreen } from "./screens/LoginScreen";
 import { RegisterScreen } from "./screens/RegisterScreen";
 import { Provider } from "react-redux";
 import store from "@/store/store";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "@react-native-firebase/auth";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store/store";
 import { setAuthenticated } from "@/store/slices/authSlice";

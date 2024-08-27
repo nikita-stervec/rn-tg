@@ -8,6 +8,7 @@ import { ChatsStackParamList } from "@/app/stack/ChatsStack"; // Путь к в�
 interface ChatItem {
   id: string;
   name: string;
+  lastMessage: string;
 }
 
 type ChatViewNavigationProp = StackNavigationProp<ChatsStackParamList, "Chats">;
@@ -19,7 +20,7 @@ interface ChatViewProps {
   route?: ChatViewRouteProp;
 }
 
-export const ChatView = ({ item, navigation, route }: ChatViewProps) => {
+export const ChatView = ({ item, navigation }: ChatViewProps) => {
   const { theme } = useTheme();
   const styles = getChatThemeStyles(theme);
 
@@ -36,7 +37,7 @@ export const ChatView = ({ item, navigation, route }: ChatViewProps) => {
       <View style={styles.chatAvatar} />
       <View style={styles.chatInfo}>
         <Text style={styles.chatName}>{item.name}</Text>
-        <Text style={styles.chatLastMessage}>Last message...</Text>
+        <Text style={styles.chatLastMessage}>{item.lastMessage}</Text>
       </View>
     </TouchableOpacity>
   );

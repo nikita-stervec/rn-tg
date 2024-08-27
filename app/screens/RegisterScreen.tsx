@@ -8,6 +8,7 @@ import auth from "@react-native-firebase/auth";
 import getThemeStyles from "@/app/helpers/getThemeStyles";
 import { useTheme } from "@/app/helpers/themeContext";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { addUser } from "../helpers/userActions";
 
 type RootStackParamList = {
   Login: undefined;
@@ -33,34 +34,35 @@ export const RegisterScreen = () => {
     navigation.navigate("Login");
   };
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     if (!email || !userTag || !password) {
       setError("All fields are required");
       return;
     }
 
-    auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then(({ user }) => {
-        if (user) {
-          dispatch(
-            setUser({
-              tag: userTag,
-              email: user.email,
-              id: user.uid,
-              name: user.displayName || undefined,
-              avatar: user.photoURL || undefined,
-            })
-          );
-          dispatch(setAuthenticated(true));
-        } else {
-          setError("User is null");
-        }
-      })
-      .catch(err => {
-        setError(err.message);
-        console.error(err);
-      });
+    try {
+      const userCredential = await auth().createUserWithEmailAndPassword(
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      addUser(userTag, email, userTag);
+
+      dispatch(
+        setUser({
+          tag: userTag,
+          email: user.email,
+          id: user.uid,
+          name: user.displayName || undefined,
+          avatar: user.photoURL || undefined,
+        })
+      );
+      dispatch(setAuthenticated(true));
+    } catch (err) {
+      setError(err.message);
+      console.error(err);
+    }
   };
 
   const themeStyles = getThemeStyles(theme);

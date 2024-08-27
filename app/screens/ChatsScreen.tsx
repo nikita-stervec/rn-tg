@@ -9,6 +9,7 @@ import { FlatList, View } from "react-native";
 interface ChatItem {
   id: string;
   name: string;
+  lastMessage: string;
 }
 
 type DrawerParamList = {
@@ -40,7 +41,7 @@ export const ChatsScreen = ({ navigation }: ChatsScreenProps) => {
     });
   }, [theme]);
 
-  const chats: ChatItem[] = [{ id: "1", name: "John Doe" }];
+  const chats: ChatItem[] = [{ id: "1", name: "John Doe", lastMessage: "123" }];
 
   return (
     <View>

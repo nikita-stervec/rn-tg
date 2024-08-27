@@ -1,26 +1,51 @@
 {
   "project_info": {
-    "project_number": "767827671392",
-    "project_id": "rn-tg-zxc",
-    "storage_bucket": "rn-tg-zxc.appspot.com"
+    "project_number": "731175189789",
+    "project_id": "rn-tg-7a973",
+    "storage_bucket": "rn-tg-7a973.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:767827671392:android:a352431b3c4ce89fe5c605",
+        "mobilesdk_app_id": "1:731175189789:android:ec0806bab782d004fcf5f4",
         "android_client_info": {
-          "package_name": "com.rntg"
+          "package_name": "rn.tg"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "731175189789-fv14fpaqlvq4e21dnrt6ojv4t53cgbbs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "rn.tg",
+            "certificate_hash": "50cfd7e8ecd06b68547ed89db838fc14095e4617"
+          }
+        },
+        {
+          "client_id": "731175189789-pg2t58fcgfjapmh11a4aomge34kq8gmr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyDvHztd0pK6G2u4j7PJrgZgnGIsIkpCjEM"
+          "current_key": "AIzaSyDSJwo5R8kGR33Lp4wCY2xV4j_Wg9JRRbA"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "731175189789-pg2t58fcgfjapmh11a4aomge34kq8gmr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "731175189789-ufv3oj92sdd2beih3t5gc87a7esvbpk4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.anonymous.rntg"
+              }
+            }
+          ]
         }
       }
     }
