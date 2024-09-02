@@ -3,12 +3,13 @@ import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useTheme } from "@/app/helpers/themeContext";
 import Entypo from "@expo/vector-icons/Entypo";
 import { DrawerActions } from "@react-navigation/native";
-import { auth } from "@/firebase";
-import { useDispatch } from "react-redux";
+import auth from "@react-native-firebase/auth";
+import { useDispatch, useSelector } from "react-redux";
 import { setAuthenticated } from "@/store/slices/authSlice";
-import { clearUser, setName } from "@/store/slices/userSlice";
+import { clearUser, setName, setTag } from "@/store/slices/userSlice";
 import getThemeStyles from "@/app/helpers/getThemeStyles";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
+import { RootState } from "@/store/store";
 
 type DrawerParamList = {
   Chats: undefined;
@@ -27,8 +28,11 @@ interface AccountScreenProps {
 
 export const AccountScreen = ({ navigation }: AccountScreenProps) => {
   const [name, setNameState] = useState("");
+  const [userTag, setUserTagState] = useState("");
   const { theme } = useTheme();
   const dispatch = useDispatch();
+  const userId = useSelector((state: RootState) => state.user.user?.id);
+  const tag = useSelector((state: RootState) => state.user.user?.tag);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -48,15 +52,25 @@ export const AccountScreen = ({ navigation }: AccountScreenProps) => {
     setNameState(text);
   };
 
+  const handleTagChange = (text: string) => {
+    setUserTagState(text);
+  };
+
   const handleApplyName = () => {
     dispatch(setName(name));
   };
 
+  const handleApplyTag = () => {
+    dispatch(setTag(userTag));
+  };
+
   const handleSignOut = () => {
-    auth.signOut().then(() => {
-      dispatch(setAuthenticated(false));
-      dispatch(clearUser());
-    });
+    auth()
+      .signOut()
+      .then(() => {
+        dispatch(setAuthenticated(false));
+        dispatch(clearUser());
+      });
   };
 
   const themeStyles = getThemeStyles(theme);
@@ -84,6 +98,23 @@ export const AccountScreen = ({ navigation }: AccountScreenProps) => {
             style={themeStyles.button}
             onPress={handleApplyName}
           >
+            <Text style={themeStyles.buttonText}>Apply</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={themeStyles.secondaryContainer}>
+          <Text style={themeStyles.text}>Your's Id: {userId}</Text>
+        </View>
+
+        <View style={themeStyles.secondaryContainer}>
+          <Text style={themeStyles.title}>Your's Tag: {tag}</Text>
+          <TextInput
+            style={themeStyles.input}
+            onChangeText={handleTagChange}
+            value={userTag}
+          />
+
+          <TouchableOpacity style={themeStyles.button} onPress={handleApplyTag}>
             <Text style={themeStyles.buttonText}>Apply</Text>
           </TouchableOpacity>
         </View>

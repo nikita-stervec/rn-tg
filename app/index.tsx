@@ -16,7 +16,7 @@ import { LoginScreen } from "./screens/LoginScreen";
 import { RegisterScreen } from "./screens/RegisterScreen";
 import { Provider } from "react-redux";
 import store from "@/store/store";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "@react-native-firebase/auth";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store/store";
 import { setAuthenticated } from "@/store/slices/authSlice";
@@ -73,6 +73,7 @@ const AppContent: React.FC = () => {
           <Drawer.Navigator
             initialRouteName='Chats'
             screenOptions={{
+              headerShadowVisible: false,
               drawerStyle: {
                 backgroundColor: themeStyles.container.backgroundColor,
               },
@@ -87,22 +88,32 @@ const AppContent: React.FC = () => {
                 failOffsetY: [-10, 10],
                 hitSlop: { left: 100 },
               },
+              headerStyle: {
+                backgroundColor: themeStyles.container.backgroundColor,
+              },
+              headerTintColor: getIconColor(),
+              headerTitleStyle: {
+                fontWeight: "bold",
+              },
+              headerShown: false,
             }}
           >
             <Drawer.Screen
               name={name ? name : cuttedEmail || "My account"}
               component={AccountScreen}
               options={{
+                headerShown: true,
                 drawerIcon: ({ color }) => (
                   <Entypo name='user' size={24} color={color} />
                 ),
               }}
             />
             <Drawer.Screen
-              name='Chats'
+              name='My Chats'
               component={ChatsStack}
               options={{
                 headerShown: false,
+
                 drawerIcon: ({ color }) => (
                   <Entypo name='chat' size={24} color={color} />
                 ),
@@ -112,6 +123,8 @@ const AppContent: React.FC = () => {
               name='Settings'
               component={SettingsScreen}
               options={{
+                headerShown: true,
+
                 drawerIcon: ({ color }) => (
                   <Entypo name='cog' size={24} color={color} />
                 ),
