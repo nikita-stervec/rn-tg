@@ -1,5 +1,4 @@
 import firestore from "@react-native-firebase/firestore";
-import { useDispatch } from "react-redux";
 
 interface IUser {
   name: string;
@@ -10,10 +9,10 @@ interface IUser {
 export const addUser = (name: string, email: string, tag: string) => {
   try {
     firestore().collection("users").add({
-      username: { name },
+      username: name,
       createdAt: firestore.FieldValue.serverTimestamp(),
-      email: { email },
-      tag: { tag },
+      email: email,
+      tag: tag,
     });
   } catch (e) {
     throw e;
