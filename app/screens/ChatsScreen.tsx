@@ -1,14 +1,30 @@
-import { useTheme } from "@/helpers/themeContext";
-import { RootState } from "@/store/store";
+import { ChatView } from "@/components/ChatView/ChatView";
+import { useTheme } from "@/app/helpers/themeContext";
 import Entypo from "@expo/vector-icons/Entypo";
 import { DrawerActions } from "@react-navigation/native";
+import { DrawerNavigationProp } from "@react-navigation/drawer";
 import React, { useLayoutEffect } from "react";
-import { Button, FlatList } from "react-native";
+import { FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useSelector } from "react-redux";
 
-export const ChatsScreen = ({ navigation }) => {
-  const { user } = useSelector((state: RootState) => state.user);
+interface ChatItem {
+  id: string;
+  name: string;
+}
+
+type DrawerParamList = {
+  Chats: undefined;
+  Settings: undefined;
+  [key: string]: undefined | { screen: string };
+};
+
+type ChatsScreenNavigationProp = DrawerNavigationProp<DrawerParamList, "Chats">;
+
+interface ChatsScreenProps {
+  navigation: ChatsScreenNavigationProp;
+}
+
+export const ChatsScreen = ({ navigation }: ChatsScreenProps) => {
   const { theme } = useTheme();
 
   useLayoutEffect(() => {
@@ -25,7 +41,7 @@ export const ChatsScreen = ({ navigation }) => {
     });
   }, [theme]);
 
-  const chats = [
+  const chats: ChatItem[] = [
     { id: "1", name: "John Doe" },
     { id: "2", name: "John Doe" },
     { id: "3", name: "John Doe" },
@@ -39,15 +55,7 @@ export const ChatsScreen = ({ navigation }) => {
         data={chats}
         keyExtractor={item => item.id}
         renderItem={({ item }) => (
-          <Button
-            title={item.name}
-            onPress={() =>
-              navigation.navigate("Chat", {
-                chatId: item.id,
-                chatName: item.name,
-              })
-            }
-          />
+          <ChatView item={item} navigation={navigation} />
         )}
       />
     </SafeAreaView>

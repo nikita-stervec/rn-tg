@@ -17,8 +17,8 @@ export const darkNavigationTheme = {
   colors: {
     ...DarkTheme.colors,
     primary: "#ffffff",
-    background: "#000000",
-    card: "#000000",
+    background: "#1e1e1e",
+    card: "#1e1e1e",
     text: "#ffffff",
     border: "#ffffff",
   },
