@@ -5,8 +5,8 @@ import { useDispatch } from "react-redux";
 import { setUser } from "@/store/slices/userSlice";
 import { setAuthenticated } from "@/store/slices/authSlice";
 import auth from "@react-native-firebase/auth";
-import getThemeStyles from "@/app/helpers/getThemeStyles";
-import { useTheme } from "@/app/helpers/themeContext";
+import getThemeStyles from "@/app/styles/getThemeStyles";
+import { useTheme } from "@/app/styles/themeContext";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { addUser } from "../helpers/userActions";
 

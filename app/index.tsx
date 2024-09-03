@@ -6,11 +6,11 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { AccountScreen } from "./screens/AccountScreen";
 import { SettingsScreen } from "./screens/SettingsScreen";
 import { ChatsStack } from "./stack/ChatsStack";
-import { ThemeProvider, useTheme } from "@/app/helpers/themeContext";
+import { ThemeProvider, useTheme } from "@/app/styles/themeContext";
 import {
   lightNavigationTheme,
   darkNavigationTheme,
-} from "@/app/helpers/navigationTheme";
+} from "@/app/styles/navigationTheme";
 import Entypo from "@expo/vector-icons/Entypo";
 import { LoginScreen } from "./screens/LoginScreen";
 import { RegisterScreen } from "./screens/RegisterScreen";
@@ -21,7 +21,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store/store";
 import { setAuthenticated } from "@/store/slices/authSlice";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import getThemeStyles from "@/app/helpers/getThemeStyles";
+import getThemeStyles from "@/app/styles/getThemeStyles";
+import { getIconColor } from "./styles/getIconColor";
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -34,6 +35,7 @@ const AppContent: React.FC = () => {
   const email = useSelector((state: RootState) => state.user.user?.email);
   const name = useSelector((state: RootState) => state.user.user?.name);
   const { theme } = useTheme();
+  const setIconColor = getIconColor(theme);
 
   useEffect(() => {
     const auth = getAuth();
@@ -61,8 +63,6 @@ const AppContent: React.FC = () => {
 
   const themeStyles = getThemeStyles(theme);
 
-  const getIconColor = () => (theme === "dark" ? "white" : "black");
-
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <NavigationContainer
@@ -77,7 +77,7 @@ const AppContent: React.FC = () => {
               drawerStyle: {
                 backgroundColor: themeStyles.container.backgroundColor,
               },
-              drawerInactiveTintColor: getIconColor(),
+              drawerInactiveTintColor: setIconColor,
               drawerActiveTintColor: "#3366FF",
               drawerActiveBackgroundColor:
                 themeStyles.container.backgroundColor,
@@ -91,7 +91,7 @@ const AppContent: React.FC = () => {
               headerStyle: {
                 backgroundColor: themeStyles.container.backgroundColor,
               },
-              headerTintColor: getIconColor(),
+              headerTintColor: setIconColor,
               headerTitleStyle: {
                 fontWeight: "bold",
               },

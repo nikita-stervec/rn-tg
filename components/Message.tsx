@@ -1,32 +1,33 @@
-import { View, Text } from "react-native";
 import React from "react";
-import { useTheme } from "@/app/helpers/themeContext";
-import getChatThemeStyles from "@/app/helpers/getChatThemeStyles";
+import { View, Text, StyleSheet } from "react-native";
+import { useTheme } from "@/app/styles/themeContext";
+import createThemeStyles from "@/app/styles/getChatThemeStyles";
 
-const Message = ({ item, id, isSender }) => {
+interface MessageProps {
+  id: string;
+  text: string;
+  sender: boolean;
+  createdAt: Date;
+}
+
+export const Message = ({ id, text, sender, createdAt }: MessageProps) => {
   const { theme } = useTheme();
-  const themeStyles = getChatThemeStyles(theme);
+  const styles = createThemeStyles(theme);
 
   return (
     <View
-      key={id}
       style={
-        isSender
-          ? themeStyles.senderMessageContainer
-          : themeStyles.receiverMessageContainer
+        sender ? styles.senderMessageContainer : styles.receiverMessageContainer
       }
     >
       <Text
-        style={
-          isSender
-            ? themeStyles.messageTextSender
-            : themeStyles.messageTextReceiver
-        }
+        style={sender ? styles.messageTextSender : styles.messageTextReceiver}
       >
-        {item}
+        {text}
+      </Text>
+      <Text style={styles.messageTime}>
+        {new Date(createdAt).toLocaleTimeString()}
       </Text>
     </View>
   );
 };
-
-export default Message;
