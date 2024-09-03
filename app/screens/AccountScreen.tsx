@@ -1,15 +1,16 @@
 import React, { useLayoutEffect, useState } from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
-import { useTheme } from "@/app/helpers/themeContext";
+import { useTheme } from "@/app/styles/themeContext";
 import Entypo from "@expo/vector-icons/Entypo";
 import { DrawerActions } from "@react-navigation/native";
 import auth from "@react-native-firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthenticated } from "@/store/slices/authSlice";
 import { clearUser, setName, setTag } from "@/store/slices/userSlice";
-import getThemeStyles from "@/app/helpers/getThemeStyles";
+import getThemeStyles from "@/app/styles/getThemeStyles";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
 import { RootState } from "@/store/store";
+import { getIconColor } from "../styles/getIconColor";
 
 type DrawerParamList = {
   Chats: undefined;
@@ -33,6 +34,7 @@ export const AccountScreen = ({ navigation }: AccountScreenProps) => {
   const dispatch = useDispatch();
   const userId = useSelector((state: RootState) => state.user.user?.id);
   const tag = useSelector((state: RootState) => state.user.user?.tag);
+  const setIconColor = getIconColor(theme);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -40,7 +42,7 @@ export const AccountScreen = ({ navigation }: AccountScreenProps) => {
         <Entypo
           name='menu'
           size={24}
-          color={theme === "dark" ? "white" : "black"}
+          color={setIconColor}
           style={{ marginLeft: 10 }}
           onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
         />

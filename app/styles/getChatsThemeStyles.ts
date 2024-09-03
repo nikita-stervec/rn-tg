@@ -2,6 +2,10 @@ import { StyleSheet } from "react-native";
 
 function getChatThemeStyles(theme: string) {
   return StyleSheet.create({
+    container: {},
+    textColor: {
+      color: "#111",
+    },
     chatItem: {
       paddingVertical: 10,
       paddingHorizontal: 10,

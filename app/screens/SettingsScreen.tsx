@@ -1,11 +1,12 @@
 import React, { useLayoutEffect, useContext } from "react";
 import { View, Text } from "react-native";
 import { Button } from "react-native";
-import { ThemeContext } from "@/app/helpers/themeContext";
-import createThemeStyles from "@/app/helpers/themeStyles";
+import { ThemeContext } from "@/app/styles/themeContext";
+import createThemeStyles from "@/app/styles/themeStyles";
 import Entypo from "@expo/vector-icons/Entypo";
 import { DrawerActions } from "@react-navigation/native";
 import { DrawerNavigationProp } from "@react-navigation/drawer";
+import { getIconColor } from "../styles/getIconColor";
 
 type DrawerParamList = {
   Settings: undefined;
@@ -25,6 +26,7 @@ interface SettingsScreenProps {
 const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const themeStyles = createThemeStyles(theme);
+  const setIconColor = getIconColor(theme);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -32,7 +34,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
         <Entypo
           name='menu'
           size={24}
-          color={theme === "dark" ? "white" : "black"}
+          color={setIconColor}
           style={{ marginLeft: 10 }}
           onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
         />

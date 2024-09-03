@@ -1,38 +1,28 @@
-import { useTheme } from "@/app/helpers/themeContext";
+import { useTheme } from "@/app/styles/themeContext";
 import { TouchableOpacity, View, Text } from "react-native";
-import getChatThemeStyles from "@/app/helpers/getChatsThemeStyles";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RouteProp } from "@react-navigation/native";
-import { ChatsStackParamList } from "@/app/stack/ChatsStack"; // Путь к вашему файлу навигации
-
-interface ChatItem {
-  id: string;
-  name: string;
-  lastMessage: string;
-}
-
-type ChatViewNavigationProp = StackNavigationProp<ChatsStackParamList, "Chats">;
-type ChatViewRouteProp = RouteProp<ChatsStackParamList, "Chats">;
+import getChatThemeStyles from "@/app/styles/getChatsThemeStyles";
+import { ChatItem } from "@/types/types";
 
 interface ChatViewProps {
   item: ChatItem;
-  navigation: ChatViewNavigationProp;
-  route?: ChatViewRouteProp;
+  onPress: (
+    chatId: string,
+    chatName: string,
+    userAvatar: string,
+    participants: string[]
+  ) => void;
 }
 
-export const ChatView = ({ item, navigation }: ChatViewProps) => {
+export const ChatView = ({ item, onPress }: ChatViewProps) => {
   const { theme } = useTheme();
   const styles = getChatThemeStyles(theme);
 
   return (
     <TouchableOpacity
       style={styles.chatItem}
-      onPress={() =>
-        navigation.navigate("Chat", {
-          chatId: item.id,
-          chatName: item.name,
-        })
-      }
+      onPress={() => {
+        onPress(item.id, item.name, item.avatar, [item.id]);
+      }}
     >
       <View style={styles.chatAvatar} />
       <View style={styles.chatInfo}>
